@@ -2,12 +2,14 @@ from app import app, db, mail
 from app.models import Student, Course, Grade
 from flask import jsonify, request, url_for
 from flask_mail import Message
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Students
 @app.route('/students', methods=['GET'])
 def get_students():
     students = Student.query.all()
-    return jsonify([student.to_dict() for student in students])
+    print(students[0])
+    return jsonify([students.to_dict() for student in students])
 
 @app.route('/students/<int:id>', methods=['GET'])
 def get_student(id):
@@ -19,14 +21,12 @@ def create_student():
     data = request.get_json() or {}
     if 'name' not in data or 'email' not in data or 'password' not in data:
         return jsonify({'message': 'Missing required parameters.'}), 404
-    # now that the values exist insert them into the database
-    student = Student(name=data['name'], email=data['email'], password_hash=data['password'])
+
+    student = Student(name=data['name'], email=data['email'], password_hash=generate_password_hash(data['password']))
     db.session.add(student)
     db.session.commit()
     return jsonify({'message': 'Student created successfully.'}), 200
     
-
-# Courses
 @app.route('/courses', methods=['GET'])
 def get_courses():
     courses = Course.query.all()

@@ -8,8 +8,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 @app.route('/students', methods=['GET'])
 def get_students():
     students = Student.query.all()
-    print(students[0])
-    return jsonify([students.to_dict() for student in students])
+    print(students)
+    return jsonify([[attr for attr in Student(student) if not attr.startswith("__")] for student in students])
 
 @app.route('/students/<int:id>', methods=['GET'])
 def get_student(id):
@@ -22,10 +22,14 @@ def create_student():
     if 'fullname' not in data or 'username' not in data or 'password' not in data:
         return jsonify({'message': 'Missing required parameters.'}), 404
 
-    student = Student(fullname=data['fullname'], email=data['email'], password_hash=generate_password_hash(data['password']), username=data['username'])
+    student = Student(fullname=data['fullname'],\
+         email=data['email'],\
+            password_hash=generate_password_hash(data['password']),\
+                username=data['username'],\
+                     phone_number=data['phone_number'])
     db.session.add(student)
     db.session.commit()
-    return jsonify({'message': 'Student created successfully.'}), 200
+    return jsonify({'message': 'Student created successfully.', 'id': student.id}), 200
     
 @app.route('/courses', methods=['GET'])
 def get_courses():

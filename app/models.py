@@ -3,10 +3,12 @@ from app import db
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     fullname = db.Column(db.String(128), index=True)
-    username = db.Column(db.String(64), index=True, unique=True)
+    username = db.Column(db.String(64), index=True, unique=True, nullable=True)
     email = db.Column(db.String(120), index=True, unique=True)
+    phone_number = db.Column(db.String(20), nullable=True)
     password_hash = db.Column(db.String(128))
     enrolled_courses = db.relationship('Course', secondary='enrollment', backref='students')
+    grades = db.relationship('Grade', backref='student', lazy=True)
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)

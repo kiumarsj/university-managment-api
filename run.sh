@@ -1,2 +1,2 @@
-flask db upgrade
-flask run
+python3 -m flask db upgrade
+python3 -m flask run

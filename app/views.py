@@ -19,10 +19,10 @@ def get_student(id):
 @app.route('/students', methods=['POST'])
 def create_student():
     data = request.get_json() or {}
-    if 'name' not in data or 'email' not in data or 'password' not in data:
+    if 'fullname' not in data or 'username' not in data or 'password' not in data:
         return jsonify({'message': 'Missing required parameters.'}), 404
 
-    student = Student(name=data['name'], email=data['email'], password_hash=generate_password_hash(data['password']))
+    student = Student(fullname=data['fullname'], email=data['email'], password_hash=generate_password_hash(data['password']), username=data['username'])
     db.session.add(student)
     db.session.commit()
     return jsonify({'message': 'Student created successfully.'}), 200

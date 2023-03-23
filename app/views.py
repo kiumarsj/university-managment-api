@@ -1,8 +1,34 @@
 from app import app, db, mail
 from app.models import Student, Course, Grade
-from flask import jsonify, request, url_for
+from flask import jsonify, request, render_template, url_for
 from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
+import jwt, datetime
+
+# Root
+@app.route('/')
+def Main():
+    return render_template('index.html')
+
+# Login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+
+    if request.method == 'POST':
+        data = request.get_json() or {}
+        print(data)
+        if 'email' not in data or 'password' not in data:
+            return jsonify({'message': 'Missing required parameters.'}), 404
+        
+        student = Student.query.filter_by(email=data['email']).first()
+        if student is None or not check_password_hash(student.password_hash, data['password']):
+            # generate jwt token
+            token = jwt.encode({'id': student.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+            return jsonify({'message': 'Login successful.', 'token': token})
+        return jsonify({'message': 'Login failed.'})
+    pass
 
 # Students
 @app.route('/students', methods=['GET'])

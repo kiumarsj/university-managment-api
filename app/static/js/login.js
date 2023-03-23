@@ -3,14 +3,16 @@ const form = document.getElementById('login-form');
 form.addEventListener('submit', async (event) => {
   event.preventDefault(); // prevent the form from submitting normally
 
-  const formData = new FormData(form);
+  // const formData = new FormData(form);
 
-  const data = JSON.stringify(Object.fromEntries(formData));
-  console.log(formData);
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  const data = JSON.stringify({"email": email, "password": password});
 
   const response = await fetch('http://localhost:5000/login', {
     method: "POST",
-    body: JSON.stringify(formData),
+    body: data,
     headers: {
       "Content-type": "application/json; charset=UTF-8"
     }
@@ -19,7 +21,7 @@ form.addEventListener('submit', async (event) => {
 
   if (response.ok) {
     const data = await response.json();
-    console.log(data); // do something with the response data
+    document.cookie = "token=" + data['token'] + "; path=/";
   } else {
     console.error('Error:', response.statusText);
   }

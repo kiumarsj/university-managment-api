@@ -24,8 +24,7 @@ def login():
         
         student = Student.query.filter_by(email=data['email']).first()
         if student is None or not check_password_hash(student.password_hash, data['password']):
-            # generate jwt token
-            token = jwt.encode({'id': student.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+            token = jwt.encode({'id': student.id, 'ip': str(request.remote_addr), 'agent': str(request.user_agent), 'platform': str(request.user_agent.platform), 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
             return jsonify({'message': 'Login successful.', 'token': token})
         return jsonify({'message': 'Login failed.'})
     pass

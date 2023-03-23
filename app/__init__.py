@@ -4,9 +4,12 @@ from flask_migrate import Migrate
 # from flask_script import Manager
 # from flask_login import LoginManager
 from flask_mail import Mail
-from config import *
+
+from app.blueprints.apiv1 import blueprint as blue
+from config import DevelopmentConfig
 
 app = Flask(__name__)
+app.register_blueprint(blue)
 # app.config.from_object('config.Config')
 app.config.from_object(DevelopmentConfig)
 

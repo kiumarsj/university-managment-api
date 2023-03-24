@@ -5,11 +5,6 @@ from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt, datetime
 
-# Root
-@app.route('/')
-def Main():
-    return render_template('index.html')
-
 # Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():

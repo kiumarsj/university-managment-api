@@ -10,6 +10,7 @@
 - SQLAlchemy
 - PostgreSQL
 - Dockerization
+- In Container Development (devcontainer)
 - Database Migration
 - Easy Scalability
 

@@ -1,13 +1,12 @@
-# blueprints/basic_endpoints/__ini__.py
 from flask import Blueprint, request
 
-blueprint = Blueprint('api', __name__, url_prefix='/api/v1')
+blueprintv1 = Blueprint('api', __name__, url_prefix='/api/v1')
 
-@blueprint.route('/hello_world')
+@blueprintv1.route('/hello_world')
 def hello_world():
     return {'message': 'Hello World!'}
 
-@blueprint.route('/entities', methods=['GET', 'POST'])
+@blueprintv1.route('/entities', methods=['GET', 'POST'])
 def entities():
     if request.method == "GET":
         return {
@@ -21,7 +20,7 @@ def entities():
             'body': request.json
         }
 
-@blueprint.route('/entities/<int:entity_id>', methods=['GET', 'PUT', 'DELETE'])
+@blueprintv1.route('/entities/<int:entity_id>', methods=['GET', 'PUT', 'DELETE'])
 def entity(entity_id):
     if request.method == "GET":
         return {

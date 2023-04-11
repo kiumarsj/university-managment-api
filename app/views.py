@@ -1,6 +1,6 @@
 from app import app, db, mail
 from app.models import Student, Course, Grade
-from flask import jsonify, request, render_template, url_for
+from flask import jsonify, request, render_template, url_for, redirect
 from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt, datetime
